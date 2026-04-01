@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# This is a package managfer agnostic helper to install package(s).
+# This is a package manager agnostic helper to install package(s).
 #
 
 set -e # Exit immediately if a command exits with a non-zero status.
