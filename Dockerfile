@@ -22,7 +22,7 @@ ARG DEBIAN_PKGS="\
 FROM ${BASEIMAGE_COMMON} AS baseimage-common
 
 # Pull base image.
-FROM ${BASEIMAGE}
+FROM ${BASEIMAGE} AS baseimage
 ARG TARGETPLATFORM
 
 # Define working directory.
@@ -30,6 +30,9 @@ WORKDIR /tmp
 
 # Install common software.
 COPY --link --from=baseimage-common / /
+
+# Upgrade existing packages.
+RUN /opt/base/bin/upg-pkg all
 
 # Install system packages.
 ARG ALPINE_PKGS
@@ -83,6 +86,10 @@ RUN \
 RUN \
     /opt/base/bin/set-cont-env DOCKER_IMAGE_PLATFORM "${TARGETPLATFORM:-}" && \
     true
+
+FROM scratch
+
+COPY --from=baseimage / /
 
 # Set environment variables.
 ENV \
