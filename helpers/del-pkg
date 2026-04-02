@@ -15,8 +15,11 @@ usage() {
 #
 
 del_pkg_apk() {
-    apk --no-cache --purge del "$@"
-    rm -rf /var/cache/misc/*
+    apk --no-cache --logfile=no --purge del "$@"
+    rm -rf \
+        /var/cache/misc/* \
+        /var/log/apk.log \
+
 }
 
 #
@@ -39,10 +42,13 @@ del_pkg_apt() {
     done
 
     if [ -n "${pkgs}" ]; then
+        mkdir -p /tmp/apt_cache
         # shellcheck disable=2086
         apt-get -q purge -y ${pkgs}
         apt-get -q --purge autoremove -y
-        rm -rf /var/log/dpkg.log \
+        rm -rf \
+            /tmp/apt_cache \
+            /var/log/dpkg.log \
             /var/log/apt/*
     fi
 }
@@ -69,6 +75,7 @@ fi
 
 if command -v apt > /dev/null; then
     export DEBIAN_FRONTEND=noninteractive
+    export LC_ALL=C
 fi
 
 del_pkg "$@"

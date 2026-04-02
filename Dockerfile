@@ -31,6 +31,20 @@ WORKDIR /tmp
 # Install common software.
 COPY --link --from=baseimage-common / /
 
+# Configure package manager.
+RUN \
+    if command -v apt > /dev/null; then \
+        echo 'Dir::Log "/dev/null";' > /etc/apt/apt.conf.d/docker-log-dir && \
+        echo 'Dir::Cache "/tmp/apt_cache";' > /etc/apt/apt.conf.d/docker-cache-dir && \
+        echo 'APT::Sandbox::User "root";' > /etc/apt/apt.conf.d/docker-disable-sandbox && \
+        /opt/base/bin/sed-patch 's|/var/log/dpkg.log|/dev/null|' /etc/dpkg/dpkg.cfg && \
+        dpkg-divert --add --local --rename --divert /usr/bin/update-alternatives.real /usr/bin/update-alternatives && \
+        echo '#!/bin/sh' > /usr/bin/update-alternatives && \
+        echo 'exec /usr/bin/update-alternatives.real --log /dev/null "$@"' > /usr/bin/update-alternatives && \
+        chmod +x /usr/bin/update-alternatives && \
+        true; \
+    fi
+
 # Upgrade existing packages.
 RUN /opt/base/bin/upg-pkg all
 

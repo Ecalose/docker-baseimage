@@ -34,11 +34,14 @@ install_pkg_apk() {
         set -- "--virtual" "$@"
     fi
 
-    apk --no-cache add "$@"
+    apk --no-cache --logfile=no add "$@"
 }
 
 cleanup_apk() {
-    rm -rf /var/cache/misc/*
+    rm -rf \
+        /var/cache/misc/* \
+        /var/log/apk.log \
+
 }
 
 #
@@ -65,6 +68,7 @@ install_pkg_apt() {
     fi
 
     if [ -n "$1" ]; then
+        mkdir -p /tmp/apt_cache
         apt-get -q update
         apt-get -q install -y --no-install-recommends "$@"
     fi
@@ -72,7 +76,9 @@ install_pkg_apt() {
 
 cleanup_apt() {
     apt-get -q clean
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf \
+        /tmp/apt_cache \
+        /var/lib/apt/lists/* \
         /var/log/dpkg.log \
         /var/log/alternatives.log \
         /var/log/apt/*
@@ -116,6 +122,7 @@ fi
 
 if command -v apt > /dev/null; then
     export DEBIAN_FRONTEND=noninteractive
+    export LC_ALL=C
 fi
 
 VIRTUAL_PKG=

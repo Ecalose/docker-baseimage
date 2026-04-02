@@ -23,12 +23,15 @@ trap "cleanup" EXIT
 #
 
 upgrade_pkg_apk() {
-    apk --no-cache upgrade "$@"
+    apk --no-cache --logfile=no upgrade "$@"
 }
 
 cleanup_apk() {
     find /etc -name "*.apk-new" -delete
-    rm -rf /var/cache/misc/*
+    rm -rf \
+        /var/cache/misc/* \
+        /var/log/apk.log \
+
 }
 
 #
@@ -36,6 +39,7 @@ cleanup_apk() {
 #
 
 upgrade_pkg_apt() {
+    mkdir -p /tmp/apt_cache
     apt-get -q update
     if [ -n "$1" ]; then
         apt-get -q install -y --no-install-recommends --only-upgrade "$@"
@@ -47,7 +51,9 @@ upgrade_pkg_apt() {
 
 cleanup_apt() {
     apt-get -q clean
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf \
+        /tmp/apt_cache \
+        /var/lib/apt/lists/* \
         /var/log/dpkg.log \
         /var/log/alternatives.log \
         /var/log/apt/*
@@ -79,6 +85,7 @@ cleanup() {
 
 if command -v apt > /dev/null; then
     export DEBIAN_FRONTEND=noninteractive
+    export LC_ALL=C
 fi
 
 if [ $# -eq 1 ] && [ "${1}" = "all" ]; then
