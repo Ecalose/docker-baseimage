@@ -32,7 +32,9 @@ die() {
 }
 
 cleanup() {
-    [ ! -f "${fpath}".bak ] || rm -f "${fpath}".bak
+    if [ -n "${tmp_file}" ]; then
+        [ ! -f "${tmp_file}" ] || rm -f "${tmp_file}"
+    fi
 }
 
 trap : TERM QUIT INT
@@ -40,6 +42,9 @@ trap "cleanup" EXIT
 
 fpath=
 eval fpath="\${$#}"
+fpath="$(realpath "${fpath}")"
+
+tmp_file="$(mktemp)"
 
 if [ "$#" -lt 2 ]; then
     usage " Not enough arguments."
@@ -52,10 +57,10 @@ else
     done
 fi
 
-sed -i.bak "$@"
+sed "$@" > "${tmp_file}"
 rc="$?"
 if [ "${rc}" -eq 0 ]; then
-    diff "${fpath}" "${fpath}".bak > /dev/null 2>&1
+    diff "${fpath}" "${tmp_file}" > /dev/null 2>&1
     case $? in
         0)
             # Files are the same.
@@ -63,6 +68,7 @@ if [ "${rc}" -eq 0 ]; then
             ;;
         1)
             # Files differ, OK.
+            mv "${tmp_file}" "${fpath}"
             exit 0
             ;;
         *) ;;
