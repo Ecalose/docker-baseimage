@@ -65,7 +65,7 @@ load_env_var() {
     var_test="$(eval echo \$\{"${var_name}"+x\})"
     if [ -z "${var_test}" ]; then
         export "${var_name}"="${var_val}"
-        echo "export ${var_name}=\"${var_val}\"" >> /var/tmp/.cont-env-internal
+        echo "export ${var_name}=\"${var_val}\"" >> /tmp/.cont-env-internal
     fi
 }
 
@@ -79,7 +79,7 @@ umask 022
 # Install container environment variables.
 STAGE=cont-env
 log "loading container environment variables..."
-echo > /var/tmp/.cont-env-internal
+echo > /tmp/.cont-env-internal
 if [ -d /etc/cont-env.d ]; then
     flist="$(mktemp)"
     find /etc/cont-env.d -maxdepth 1 -type f | sort > "${flist}"
