@@ -84,6 +84,13 @@ RUN \
         /etc/cont-logrotate.d \
     && true
 
+# User management files are stored outside the container's file system.
+RUN \
+    ln -sf /tmp/.passwd /etc/passwd && \
+    ln -sf /tmp/.group /etc/group && \
+    ln -sf /tmp/.shadow /etc/shadow  && \
+    true
+
 # Keep a copy of default packages repository.
 RUN \
     if [ -f /etc/apk/repositories ]; then \

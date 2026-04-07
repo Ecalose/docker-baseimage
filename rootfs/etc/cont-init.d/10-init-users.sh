@@ -160,8 +160,9 @@ add_user_to_group() {
 }
 
 # Initialize files.
-rm -f /etc/passwd /etc/group /etc/shadow
-touch /etc/passwd /etc/group /etc/shadow
+echo > /etc/passwd
+echo > /etc/group
+echo > /etc/shadow
 
 # Add defined groups.
 if [ -d /etc/cont-groups.d ]; then
