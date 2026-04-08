@@ -84,6 +84,33 @@ RUN \
         /etc/cont-logrotate.d \
     && true
 
+# Setup variable data files directories.
+# https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05.html
+RUN \
+    for dir in $(find /var -mindepth 1 -maxdepth 1 -type d -or -type l); do \
+        case "$dir" in \
+            /var/backups) rm -rf "$dir" ;; \
+            /var/cache)   rm -rf "$dir" ; ln -s /config/var/cache /var/cache ;; \
+            /var/empty)   ;; \
+            /var/lib)     ;; \
+            /var/local)   rm -rf "$dir" ;; \
+            /var/lock)    rm -rf "$dir" ; ln -s /run/lock /var/lock ;; \
+            /var/log)     rm -rf "$dir" ; ln -s /config/log /var/log ;; \
+            /var/mail)    rm -rf "$dir" ;; \
+            /var/opt)     rm -rf "$dir" ;; \
+            /var/run)     rm -rf "$dir" ; ln -sf /run /var/run ;; \
+            /var/spool)   rm -rf "$dir" ;; \
+            /var/tmp)     rm -rf "$dir" ; ln -s /config/var/tmp /var/tmp ;; \
+            *) echo "ERROR: unknown directory: $dir"; exit 1 ;; \
+        esac \
+    done
+
+# Setup the run-time variable data folder.
+RUN \
+    rm -rf /run  && \
+    ln -sf /tmp/run /run && \
+    true
+
 # User management files are stored outside the container's file system.
 RUN \
     ln -sf /tmp/.passwd /etc/passwd && \
