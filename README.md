@@ -70,7 +70,6 @@ This baseimage is available for multiple Linux distributions:
 | [Debian 11]        | debian-11-vX.Y.Z      | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/debian-11-v3?style=for-the-badge)](#)    |
 | [Debian 12]        | debian-12-vX.Y.Z      | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/debian-12-v3?style=for-the-badge)](#)    |
 | [Debian 13]        | debian-13-vX.Y.Z      | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/debian-13-v3?style=for-the-badge)](#)    |
-| [Ubuntu 16.04 LTS] | ubuntu-16.04-vX.Y.Z   | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/ubuntu-16.04-v3?style=for-the-badge)](#) |
 | [Ubuntu 18.04 LTS] | ubuntu-18.04-vX.Y.Z   | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/ubuntu-18.04-v3?style=for-the-badge)](#) |
 | [Ubuntu 20.04 LTS] | ubuntu-20.04-vX.Y.Z   | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/ubuntu-20.04-v3?style=for-the-badge)](#) |
 | [Ubuntu 22.04 LTS] | ubuntu-22.04-vX.Y.Z   | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/ubuntu-22.04-v3?style=for-the-badge)](#) |
@@ -98,7 +97,6 @@ details.
 [Debian 11]: https://www.debian.org/releases/bullseye/
 [Debian 12]: https://www.debian.org/releases/bookworm/
 [Debian 13]: https://www.debian.org/releases/trixie/
-[Ubuntu 16.04 LTS]: http://releases.ubuntu.com/16.04/
 [Ubuntu 18.04 LTS]: http://releases.ubuntu.com/18.04/
 [Ubuntu 20.04 LTS]: http://releases.ubuntu.com/20.04/
 [Ubuntu 22.04 LTS]: http://releases.ubuntu.com/22.04/
