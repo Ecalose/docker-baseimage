@@ -67,7 +67,7 @@
 
 static const char* const short_options = "c:dh";
 static struct option long_options[] = {
-    { "configdir", no_argument, NULL, 'c' },
+    { "configdir", required_argument, NULL, 'c' },
     { "debug", no_argument, NULL, 'd' },
     { "help", no_argument, NULL, 'h' },
     { NULL, 0, NULL, 0 }
@@ -539,10 +539,6 @@ static void handle_line(lm_context_t *ctx, unsigned int mfid, char *buf)
                     ERROR("Notification title memory allocation failure: %s.",
                             notif->title);
                 }
-
-                if (!title) {
-                    title = "EXECERROR";
-                }
             }
             else {
                 title = notif->title;
@@ -579,10 +575,6 @@ static void handle_line(lm_context_t *ctx, unsigned int mfid, char *buf)
                 else {
                     ERROR("Notification description memory allocation failure: %s.",
                             notif->desc);
-                }
-
-                if (!desc) {
-                    desc = "EXECERROR";
                 }
             }
             else {
@@ -630,10 +622,6 @@ static void handle_line(lm_context_t *ctx, unsigned int mfid, char *buf)
                     ERROR("Notification level memory allocation failure: %s.",
                             notif->level);
                 }
-
-                if (!level) {
-                    title = "EXECERROR";
-                }
             }
             else {
                 level = notif->level;
@@ -653,7 +641,10 @@ static void handle_line(lm_context_t *ctx, unsigned int mfid, char *buf)
 
                 // Send the target.
                 DEBUG("Invoking target '%s'...", target->name);
-                invoke_target(target->send, title, desc, level);
+                invoke_target(target->send,
+                    title ? title : "EXECERROR",
+                    desc ? desc : "EXECERROR",
+                    level ? level : "EXECERROR");
                 target->last_notif_sent[nidx] = get_time();
             }
 
@@ -979,16 +970,16 @@ static lm_notification_t *alloc_notification(lm_context_t *ctx, const char *noti
 
     // Validate config.
     if (IS_SUCCESS(retval)) {
-        if (strlen(notif->filter) == 0) {
+        if (!notif->filter || strlen(notif->filter) == 0) {
             SET_ERROR(retval, "Filter executable missing for notification defined at '%s'", notification_dir);
         }
-        else if (strlen(notif->title) == 0) {
+        else if (!notif->title || strlen(notif->title) == 0) {
             SET_ERROR(retval, "Title missing for notification defined at '%s'", notification_dir);
         }
-        else if (strlen(notif->desc) == 0) {
+        else if (!notif->desc || strlen(notif->desc) == 0) {
             SET_ERROR(retval, "Description missing for notification defined at '%s'", notification_dir);
         }
-        else if (strlen(notif->level) == 0) {
+        else if (!notif->level || strlen(notif->level) == 0) {
             SET_ERROR(retval, "Level missing for notification defined at '%s'", notification_dir);
         }
         else if (notif->num_monitored_files == 0) {
