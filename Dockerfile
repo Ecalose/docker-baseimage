@@ -33,15 +33,36 @@ COPY --link --from=baseimage-common / /
 
 # Configure package manager.
 RUN \
-    if command -v apt > /dev/null; then \
+    if command -v apt-get > /dev/null; then \
         echo 'Dir::Log "/dev/null";' > /etc/apt/apt.conf.d/docker-log-dir && \
         echo 'Dir::Cache "/tmp/apt_cache";' > /etc/apt/apt.conf.d/docker-cache-dir && \
+        echo 'Dir::State::Lists "/tmp/apt_cache/lists/";' > /etc/apt/apt.conf.d/docker-lists-dir && \
         echo 'APT::Sandbox::User "root";' > /etc/apt/apt.conf.d/docker-disable-sandbox && \
+        \
         /opt/base/bin/sed-patch 's|/var/log/dpkg.log|/dev/null|' /etc/dpkg/dpkg.cfg && \
+        /opt/base/bin/sed-patch 's|/var/cache/debconf/|/tmp/debconf_cache/|' /etc/debconf.conf && \
+        \
+        dpkg-divert --add --local --rename --divert /usr/bin/apt-get.real /usr/bin/apt-get && \
+        echo '#!/bin/sh' > /usr/bin/apt-get && \
+        echo 'mkdir -p /tmp/apt_cache' >> /usr/bin/apt-get && \
+        echo 'mkdir -p /tmp/apt_cache/lists/partial' >> /usr/bin/apt-get && \
+        echo 'exec /usr/bin/apt-get.real "$@"' >> /usr/bin/apt-get && \
+        chmod +x /usr/bin/apt-get && \
+        \
+        dpkg-divert --add --local --rename --divert /usr/bin/apt.real /usr/bin/apt && \
+        echo '#!/bin/sh' > /usr/bin/apt && \
+        echo 'mkdir -p /tmp/apt_cache' >> /usr/bin/apt && \
+        echo 'mkdir -p /tmp/apt_cache/lists/partial' >> /usr/bin/apt && \
+        echo 'exec /usr/bin/apt.real "$@"' >> /usr/bin/apt && \
+        chmod +x /usr/bin/apt && \
+        \
         dpkg-divert --add --local --rename --divert /usr/bin/update-alternatives.real /usr/bin/update-alternatives && \
         echo '#!/bin/sh' > /usr/bin/update-alternatives && \
-        echo 'exec /usr/bin/update-alternatives.real --log /dev/null "$@"' > /usr/bin/update-alternatives && \
+        echo 'exec /usr/bin/update-alternatives.real --log /dev/null "$@"' >> /usr/bin/update-alternatives && \
         chmod +x /usr/bin/update-alternatives && \
+        true; \
+    elif command -v apk > /dev/null; then \
+        ln -s /tmp /etc/apk/cache && \
         true; \
     fi
 

@@ -34,7 +34,7 @@ install_pkg_apk() {
         set -- "--virtual" "$@"
     fi
 
-    apk --no-cache --logfile=no add "$@"
+    apk --no-cache add "$@"
 }
 
 cleanup_apk() {
@@ -68,7 +68,6 @@ install_pkg_apt() {
     fi
 
     if [ -n "$1" ]; then
-        mkdir -p /tmp/apt_cache
         apt-get -q update
         apt-get -q install -y --no-install-recommends "$@"
     fi
@@ -120,7 +119,7 @@ if [ -z "$1" ]; then
     usage
 fi
 
-if command -v apt > /dev/null; then
+if command -v apt-get > /dev/null; then
     export DEBIAN_FRONTEND=noninteractive
     export LC_ALL=C
 fi

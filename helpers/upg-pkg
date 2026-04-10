@@ -23,7 +23,7 @@ trap "cleanup" EXIT
 #
 
 upgrade_pkg_apk() {
-    apk --no-cache --logfile=no upgrade "$@"
+    apk --no-cache upgrade "$@"
 }
 
 cleanup_apk() {
@@ -39,7 +39,6 @@ cleanup_apk() {
 #
 
 upgrade_pkg_apt() {
-    mkdir -p /tmp/apt_cache
     apt-get -q update
     if [ -n "$1" ]; then
         apt-get -q install -y --no-install-recommends --only-upgrade "$@"
@@ -83,7 +82,7 @@ cleanup() {
 # Main
 #
 
-if command -v apt > /dev/null; then
+if command -v apt-get > /dev/null; then
     export DEBIAN_FRONTEND=noninteractive
     export LC_ALL=C
 fi
