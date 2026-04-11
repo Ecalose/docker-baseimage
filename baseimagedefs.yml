@@ -17,6 +17,15 @@ baseimage:
     for any long-lived application.
   gui: false
   history:
+    - version: 3.11.0
+      date: 2026-04-11
+      changes:
+        added:
+          - 'Ability to run the container with read-only filesystem.'
+        changed:
+          - 'The underlying distro packages are updated to get all security updates.'
+        removed:
+          - 'Image based on Ubuntu 16.04 (Expanded Security Maintenance ended on 2026/04).'
     - version: 3.10.5
       date: 2026-02-18
       changes:
