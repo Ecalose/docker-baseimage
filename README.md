@@ -59,7 +59,6 @@ This baseimage is available for multiple Linux distributions:
 
 | Linux Distribution | Docker Image Tag      | Size |
 |--------------------|-----------------------|------|
-| [Alpine 3.16]      | alpine-3.16-vX.Y.Z    | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/alpine-3.16-v3?style=for-the-badge)](#)  |
 | [Alpine 3.17]      | alpine-3.17-vX.Y.Z    | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/alpine-3.17-v3?style=for-the-badge)](#)  |
 | [Alpine 3.18]      | alpine-3.18-vX.Y.Z    | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/alpine-3.18-v3?style=for-the-badge)](#)  |
 | [Alpine 3.19]      | alpine-3.19-vX.Y.Z    | [![](https://img.shields.io/docker/image-size/jlesage/baseimage/alpine-3.19-v3?style=for-the-badge)](#)  |
@@ -86,7 +85,6 @@ Docker image tags follow this structure:
 View all available tags on [Docker Hub] or check the [Releases] page for version
 details.
 
-[Alpine 3.16]: https://alpinelinux.org/posts/Alpine-3.16.0-released.html
 [Alpine 3.17]: https://alpinelinux.org/posts/Alpine-3.17.0-released.html
 [Alpine 3.18]: https://alpinelinux.org/posts/Alpine-3.18.0-released.html
 [Alpine 3.19]: https://alpinelinux.org/posts/Alpine-3.19.0-released.html

@@ -30,7 +30,8 @@ baseimage:
         changed:
           - 'The underlying distro packages are updated to get all security updates.'
         removed:
-          - 'Image based on Ubuntu 16.04 (Expanded Security Maintenance ended on 2026/04).'
+          - 'Image based on Ubuntu 16.04 (Expanded Security Maintenance ended on 2026-04).'
+          - 'Image based on Alpine 3.16 (reached end of support on 2024-05-23).'
     - version: 3.10.5
       date: 2026-02-18
       changes:
