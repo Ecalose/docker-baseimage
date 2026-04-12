@@ -63,6 +63,12 @@ RUN \
         true; \
     elif command -v apk > /dev/null; then \
         ln -s /tmp /etc/apk/cache && \
+        if apk add --help 2>&1 | grep -q logfile; then \
+            mkdir -p /usr/local/sbin; \
+            echo '#!/bin/sh' > /usr/local/sbin/apk; \
+            echo 'exec /sbin/apk --logfile=no "$@"' >> /usr/local/sbin/apk; \
+            chmod +x /usr/local/sbin/apk; \
+        fi && \
         true; \
     fi
 
