@@ -51,7 +51,8 @@ upgrade_pkg_apt() {
 cleanup_apt() {
     apt-get -q clean
     rm -rf \
-        /tmp/apt_cache \
+        /var/cache/apt/* \
+        /var/cache/debconf/* \
         /var/lib/apt/lists/* \
         /var/log/dpkg.log \
         /var/log/alternatives.log \

@@ -46,8 +46,11 @@ del_pkg_apt() {
         apt-get -q purge -y ${pkgs}
         apt-get -q --purge autoremove -y
         rm -rf \
-            /tmp/apt_cache \
+            /var/cache/apt/* \
+            /var/cache/debconf/* \
+            /var/lib/apt/lists/* \
             /var/log/dpkg.log \
+            /var/log/alternatives.log \
             /var/log/apt/*
     fi
 }
