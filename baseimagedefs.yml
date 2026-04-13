@@ -17,6 +17,15 @@ baseimage:
     for any long-lived application.
   gui: false
   history:
+    - version: 3.11.2
+      date: 2026-04-12
+      changes:
+        changed:
+          - 'Improve cleanup done by package management helpers.'
+          - 'Adjust read-only filesystem support to preserve `/var/cache`, as it is commonly used by system software and libraries (rather than the application itself).'
+        fixed:
+          - 'Regression causing an empty line to be added to user management files.'
+          - 'Regression where `sed-patch` helper incorrectly changed ownership and permissions of modified files.'
     - version: 3.11.1
       date: 2026-04-11
       changes:
