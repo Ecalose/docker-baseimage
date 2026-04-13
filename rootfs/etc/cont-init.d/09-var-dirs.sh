@@ -28,15 +28,6 @@ chmod 777 "${VAR_TMP_DIR}"
 chmod +t "${VAR_TMP_DIR}" || true
 
 #
-# The `/var/cache` directory is intended for cached data from applications.
-#
-# `/var/cache` -> `/config/var/cache`
-#
-CACHE_DIR="/config/var/cache"
-mkdir -p "${CACHE_DIR}"
-chmod 755 "${CACHE_DIR}"
-
-#
 # The `/var/log` directory contains miscellaneous log files.
 #
 # `/var/log` -> /config/log

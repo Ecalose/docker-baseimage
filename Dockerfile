@@ -35,26 +35,9 @@ COPY --link --from=baseimage-common / /
 RUN \
     if command -v apt-get > /dev/null; then \
         echo 'Dir::Log "/dev/null";' > /etc/apt/apt.conf.d/docker-log-dir && \
-        echo 'Dir::Cache "/tmp/apt_cache";' > /etc/apt/apt.conf.d/docker-cache-dir && \
-        echo 'Dir::State::Lists "/tmp/apt_cache/lists/";' > /etc/apt/apt.conf.d/docker-lists-dir && \
         echo 'APT::Sandbox::User "root";' > /etc/apt/apt.conf.d/docker-disable-sandbox && \
         \
         /opt/base/bin/sed-patch 's|/var/log/dpkg.log|/dev/null|' /etc/dpkg/dpkg.cfg && \
-        /opt/base/bin/sed-patch 's|/var/cache/debconf/|/tmp/debconf_cache/|' /etc/debconf.conf && \
-        \
-        dpkg-divert --add --local --rename --divert /usr/bin/apt-get.real /usr/bin/apt-get && \
-        echo '#!/bin/sh' > /usr/bin/apt-get && \
-        echo 'mkdir -p /tmp/apt_cache' >> /usr/bin/apt-get && \
-        echo 'mkdir -p /tmp/apt_cache/lists/partial' >> /usr/bin/apt-get && \
-        echo 'exec /usr/bin/apt-get.real "$@"' >> /usr/bin/apt-get && \
-        chmod +x /usr/bin/apt-get && \
-        \
-        dpkg-divert --add --local --rename --divert /usr/bin/apt.real /usr/bin/apt && \
-        echo '#!/bin/sh' > /usr/bin/apt && \
-        echo 'mkdir -p /tmp/apt_cache' >> /usr/bin/apt && \
-        echo 'mkdir -p /tmp/apt_cache/lists/partial' >> /usr/bin/apt && \
-        echo 'exec /usr/bin/apt.real "$@"' >> /usr/bin/apt && \
-        chmod +x /usr/bin/apt && \
         \
         dpkg-divert --add --local --rename --divert /usr/bin/update-alternatives.real /usr/bin/update-alternatives && \
         echo '#!/bin/sh' > /usr/bin/update-alternatives && \
@@ -62,7 +45,6 @@ RUN \
         chmod +x /usr/bin/update-alternatives && \
         true; \
     elif command -v apk > /dev/null; then \
-        ln -s /tmp /etc/apk/cache && \
         if apk add --help 2>&1 | grep -q logfile; then \
             mkdir -p /usr/local/sbin; \
             echo '#!/bin/sh' > /usr/local/sbin/apk; \
@@ -117,7 +99,7 @@ RUN \
     for dir in $(find /var -mindepth 1 -maxdepth 1 -type d -or -type l); do \
         case "$dir" in \
             /var/backups) rm -rf "$dir" ;; \
-            /var/cache)   rm -rf "$dir" ; ln -s /config/var/cache /var/cache ;; \
+            /var/cache)   ;; \
             /var/empty)   ;; \
             /var/lib)     ;; \
             /var/local)   rm -rf "$dir" ;; \
