@@ -45,8 +45,6 @@ eval fpath="\${$#}"
 fpath="$(realpath "${fpath}")"
 
 tmp_file="$(mktemp)"
-chmod "$(stat -c "%a" "${fpath}")" "${tmp_file}"
-chown "$(stat -c "%u:%g" "${fpath}")" "${tmp_file}"
 
 if [ "$#" -lt 2 ]; then
     usage " Not enough arguments."
@@ -70,6 +68,8 @@ if [ "${rc}" -eq 0 ]; then
             ;;
         1)
             # Files differ, OK.
+            chmod "$(stat -c "%a" "${fpath}")" "${tmp_file}"
+            chown "$(stat -c "%u:%g" "${fpath}")" "${tmp_file}"
             mv "${tmp_file}" "${fpath}"
             exit 0
             ;;
