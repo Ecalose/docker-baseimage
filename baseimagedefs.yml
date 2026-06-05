@@ -17,6 +17,11 @@ baseimage:
     for any long-lived application.
   gui: false
   history:
+    - version: 3.11.6
+      date: 2026-06-05
+      changes:
+        fixed:
+          - '`sed-patch` error while handling read-only files.'
     - version: 3.11.5
       date: 2026-05-29
       changes:
