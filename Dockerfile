@@ -130,10 +130,9 @@ RUN \
     done
 
 # Setup the run-time variable data folder.
-RUN \
-    rm -rf /run  && \
-    ln -sf /tmp/run /run && \
-    true
+# Must be a real folder and not a symlink, because container engines can
+# automatically mount file under it during container creation.
+RUN mkdir -p /run
 
 # User management files are stored outside the container's file system.
 RUN \

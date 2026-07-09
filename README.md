@@ -765,7 +765,7 @@ The baseimage includes these notification backends:
 
 The baseimage supports running with a read-only root filesystem. This can be
 enabled when creating the container by adding the `--read-only` option to the
-`docker run` command.
+`docker run` command (or `read_only: true` in Docker Compose).
 
 Running a container in read-only mode improves security and reliability by
 preventing unintended or malicious modifications to the filesystem. It also
@@ -776,17 +776,17 @@ When this mode is enabled, the container cannot write to the root filesystem.
 However, the baseimage is designed to transparently route standard writable
 locations to appropriate paths:
 
-- Ephemeral data is stored in `/tmp`
-- Persistent data is stored under `/config` (which must already be mounted as a
-  volume)
+- Ephemeral data is stored in `/tmp` and `/run`.
+- Persistent data is stored under `/config` (which must already be mounted as
+  a volume).
 
-As a result, the only requirement specific to read-only mode is to make `/tmp`
-writable by mounting it as a temporary filesystem, using the `--tmpfs /tmp`
-option.
+As a result, the only additional requirements specific to read-only mode are to
+make `/tmp` and `/run` writable by mounting them as temporary filesystems using
+the `--tmpfs /tmp` and `--tmpfs /run` options.
 
-As long as `/config` is mounted and `/tmp` is provided as a `tmpfs`, the
-container should operate normally in read-only mode without any further
-configuration.
+As long as `/config` is mounted as a volume and `/tmp` and `/run` are provided
+as `tmpfs`, the container should operate normally in read-only mode without any
+further configuration.
 
 ### Tips and Best Practices
 
