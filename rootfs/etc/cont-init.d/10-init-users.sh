@@ -126,6 +126,9 @@ add_user() {
     uid="$2"
     gid="$3"
     homedir="${4:-/dev/null}"
+    password_hash="${5:-}"
+
+    [ -n "${password_hash}" ] || password_hash="!"
 
     if ${duplicate_check} && user_id_exists "${uid}"; then
         err "user ID '${uid}' already exists."
@@ -142,7 +145,7 @@ add_user() {
     echo "${name}::${uid}:${gid}::${homedir}:/sbin/nologin" >> /etc/passwd
 
     # Add a corresponding entry to '/etc/shadow'.
-    echo "${name}:!::0:::::" >> /etc/shadow
+    echo "${name}:${password_hash}::0:::::" >> /etc/shadow
 }
 
 add_user_to_group() {
@@ -203,6 +206,8 @@ if [ -d /etc/cont-users.d ]; then
         gid="$(get_content "${entry}"/gid)"
         home="$(get_content "${entry}"/home)"
         grps="$(get_content "${entry}"/grps)"
+        password="$(get_content "${entry}"/password)"
+        password_hash="$(get_content "${entry}"/password_hash)"
 
         if is-bool-val-true "${disabled:-0}"; then
             continue
@@ -213,8 +218,13 @@ if [ -d /etc/cont-users.d ]; then
         user_id_valid "${uid}" || die "user id defined at ${entry} is not valid."
         group_id_valid "${gid}" || die "group id defined at ${entry} is not valid."
 
+        # Handle password.
+        if [ -n "${password}" ]; then
+            password_hash="$(/opt/base/bin/mkpasswd "${password}")"
+        fi
+
         # Add user.
-        add_user "${name}" "${uid}" "${gid}" "${home}"
+        add_user "${name}" "${uid}" "${gid}" "${home}" "${password_hash}"
         printf "%s\n" "${grps}" | while read -r grp; do
             [ -n "${grp}" ] || continue
             group_name_valid "${grp}" || err "group name '${grp}' defined at ${entry} is not valid."

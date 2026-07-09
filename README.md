@@ -398,6 +398,8 @@ The following files can be defined for a user:
 | gid                    | Unsigned integer | The group ID of the user. | None |
 | home                   | String           | The home directory of the user. | `/dev/null` |
 | grps                   | String           | A list of group names the user belongs to, one per line. | None |
+| password               | String           | Password of the user. | None |
+| password_hash          | String           | Password hash of the user, in the format `$id$salt$hash`, as produced by `mkpasswd`. | None |
 
 The following table provides details about some value types:
 

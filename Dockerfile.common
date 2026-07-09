@@ -83,6 +83,21 @@ RUN xx-verify --static /tmp/shadow-rs-install/usr/sbin/shadow-rs
 COPY --from=upx /usr/bin/upx /usr/bin/upx
 RUN upx /tmp/shadow-rs-install/usr/sbin/shadow-rs
 
+# Build mkpasswd.
+FROM --platform=$BUILDPLATFORM golang:1.23-alpine AS mkpasswd
+ARG TARGETPLATFORM
+ENV CGO_ENABLED=0
+COPY --from=xx / /
+COPY src/mkpasswd /tmp/build-mkpasswd
+RUN \
+    cd /tmp/build-mkpasswd && \
+    go mod init mkpasswd && \
+    go get github.com/tredoe/crypt/sha512_crypt && \
+    xx-go build -ldflags "-s -w"
+RUN xx-verify --static /tmp/build-mkpasswd/mkpasswd
+COPY --from=upx /usr/bin/upx /usr/bin/upx
+RUN upx /tmp/build-mkpasswd/mkpasswd
+
 # Pull the scratch image.
 FROM scratch
 
@@ -100,6 +115,9 @@ COPY --link --from=logrotate /tmp/logrotate-install/usr/sbin/logrotate /opt/base
 
 # Install shawdow-rs.
 COPY --link --from=shadow-rs /tmp/shadow-rs-install /shadow-rs/
+
+# Install mkpasswd.
+COPY --link --from=mkpasswd /tmp/build-mkpasswd/mkpasswd /opt/base/bin/
 
 # Copy helpers.
 COPY helpers/* /opt/base/bin/
