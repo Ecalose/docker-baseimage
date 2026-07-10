@@ -142,7 +142,7 @@ add_user() {
     fi
 
     # Add the user to '/etc/passwd'.
-    echo "${name}::${uid}:${gid}::${homedir}:/sbin/nologin" >> /etc/passwd
+    echo "${name}:x:${uid}:${gid}::${homedir}:/sbin/nologin" >> /etc/passwd
 
     # Add a corresponding entry to '/etc/shadow'.
     echo "${name}:${password_hash}::0:::::" >> /etc/shadow
