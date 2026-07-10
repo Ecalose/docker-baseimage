@@ -385,23 +385,23 @@ The following files can be defined for a group:
 
 | File                   | Type             | Description | Default |
 |------------------------|------------------|-------------|---------|
-| name                   | String           | Overrides the group name. | None |
-| disabled               | Boolean          | Indicates the group is disabled and will not be created. | `FALSE` |
-| id                     | Unsigned integer | The numeric ID of the group. | None |
+| `name`                 | String           | Overrides the group name. The directory name is used if omitted. | None |
+| `disabled`             | Boolean          | Specifies whether the group is disabled and should not be created. | `FALSE` |
+| `id`                   | Unsigned integer | Specifies the numeric ID of the group. | None |
 
 The following files can be defined for a user:
 
 
 | File                   | Type             | Description | Default |
 |------------------------|------------------|-------------|---------|
-| name                   | String           | Overrides the user name. | None |
-| disabled               | Boolean          | Indicates the user is disabled and will not be created. | `FALSE` |
-| id                     | Unsigned integer | The numeric ID of the user. | None |
-| gid                    | Unsigned integer | The group ID of the user. | None |
-| home                   | String           | The home directory of the user. | `/dev/null` |
-| grps                   | String           | A list of group names the user belongs to, one per line. | None |
-| password               | String           | Password of the user. | None |
-| password_hash          | String           | Password hash of the user, in the format `$id$salt$hash`, as produced by `mkpasswd`. | None |
+| `name`                 | String           | Overrides the user name. The directory name is used if omitted. | None |
+| `disabled`             | Boolean          | Specifies whether the user is disabled and should not be created. | `FALSE` |
+| `id`                   | Unsigned integer | Specifies the numeric ID of the user. | None |
+| `gid`                  | Unsigned integer | Specifies the primary group ID of the user. | None |
+| `home`                 | String           | Specifies the user's home directory. | `/dev/null` |
+| `grps`                 | String           | Specifies the list of groups the user belongs to, with one group name per line. | None |
+| `password`             | String           | Specifies the user's password. | None |
+| `password_hash`        | String           | Specifies the user's password hash in the format `$id$salt$hash`, as produced by `mkpasswd`. | None |
 
 The following table provides details about some value types:
 
