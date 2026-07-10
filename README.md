@@ -385,6 +385,7 @@ The following files can be defined for a group:
 
 | File                   | Type             | Description | Default |
 |------------------------|------------------|-------------|---------|
+| name                   | String           | Overrides the group name. | None |
 | disabled               | Boolean          | Indicates the group is disabled and will not be created. | `FALSE` |
 | id                     | Unsigned integer | The numeric ID of the group. | None |
 
@@ -393,6 +394,7 @@ The following files can be defined for a user:
 
 | File                   | Type             | Description | Default |
 |------------------------|------------------|-------------|---------|
+| name                   | String           | Overrides the user name. | None |
 | disabled               | Boolean          | Indicates the user is disabled and will not be created. | `FALSE` |
 | id                     | Unsigned integer | The numeric ID of the user. | None |
 | gid                    | Unsigned integer | The group ID of the user. | None |

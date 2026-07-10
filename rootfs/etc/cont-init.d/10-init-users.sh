@@ -31,7 +31,7 @@ get_content() {
         if [ "${2:-string}" = "boolean" ] && [ "$(stat -c "%s" "$1")" -eq 0 ]; then
             echo "1"
         else
-            cat "$1"
+            printf "%s" "$(cat "$1")"
         fi
     fi
 }
@@ -179,13 +179,16 @@ fi
 if [ -d /etc/cont-groups.d ]; then
     find /etc/cont-groups.d -type d -mindepth 1 -maxdepth 1 | while read -r entry; do
         # Get attributes.
-        name="$(basename "${entry}")"
+        name="$(get_content "${entry}"/name)"
         disabled="$(get_content "${entry}"/disabled boolean)"
         id="$(get_content "${entry}"/id)"
 
         if is-bool-val-true "${disabled:-0}"; then
             continue
         fi
+
+        # Fallback to directory name if group name not explicitly set.
+        [ -n "${name}" ] || name="$(basename "${entry}")"
 
         # Validate attributes.
         group_name_valid "${name}" || die "group name defined at ${entry} is not valid."
@@ -200,7 +203,7 @@ fi
 if [ -d /etc/cont-users.d ]; then
     find /etc/cont-users.d -type d -mindepth 1 -maxdepth 1 | while read -r entry; do
         # Get attributes.
-        name="$(basename "${entry}")"
+        name="$(get_content "${entry}"/name)"
         disabled="$(get_content "${entry}"/disabled boolean)"
         uid="$(get_content "${entry}"/id)"
         gid="$(get_content "${entry}"/gid)"
@@ -212,6 +215,9 @@ if [ -d /etc/cont-users.d ]; then
         if is-bool-val-true "${disabled:-0}"; then
             continue
         fi
+
+        # Fallback to directory name if user name not explicitly set.
+        [ -n "${name}" ] || name="$(basename "${entry}")"
 
         # Validate attributes.
         user_name_valid "${name}" || die "user name defined at ${entry} is not valid."
