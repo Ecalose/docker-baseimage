@@ -11,8 +11,8 @@ set -u # Treat unset variables as an error.
 find /tmp -mindepth 1 -maxdepth 1 ! -name '.cont-env-internal' -exec rm -rf {} +
 
 # Clear `/run`, but ignore errors, because container engines can mount files
-# under `/run` that will fail to be remove (e.g. secrets or .containerenv from
+# under `/run` that will fail to be removed (e.g. secrets or .containerenv from
 # podman).
-find /tmp/run -mindepth 1 -maxdepth 1 ! -name 'secrets' -exec rm -rf {} + 2>/dev/null || true
+find /run -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4
