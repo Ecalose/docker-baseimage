@@ -17,6 +17,16 @@ baseimage:
     for any long-lived application.
   gui: false
   history:
+    - version: 3.11.8
+      date: 2026-07-11
+      changes:
+        added:
+          - 'Users definition: ability to define password.'
+          - 'Users and groups definition: ability to override name.'
+        fixed:
+          - 'Regression causing container startup failure when the container engine automatically mounts files under `/run`.'
+        changed:
+          - 'Read-only filesystem support now requires exposing `/run` as a tmpfs.'
     - version: 3.11.7
       date: 2026-06-17
       changes:
