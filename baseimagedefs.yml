@@ -25,6 +25,7 @@ baseimage:
           - 'Users and groups definition: ability to override name.'
         fixed:
           - 'Regression causing container startup failure when the container engine automatically mounts files under `/run`.'
+          - 'Users definition: password field not set to `x`.'
         changed:
           - 'Read-only filesystem support now requires exposing `/run` as a tmpfs.'
     - version: 3.11.7
